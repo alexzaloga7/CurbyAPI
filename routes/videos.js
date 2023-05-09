@@ -36,46 +36,55 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", (req, res) => {
   const videos = readVideoDetailsFile();
-  const { title, description, image, location } = req.body;
-  const newVideoUpload = {
-    id: uuid(),
-    title,
-    channel: "Mean Girls",
-    image,
-    description,
-    views: "4",
-    likes: "4",
-    duration: "4:01",
-    video: "https://project-2-api.herokuapp.com/stream",
-    timestamp: Date.now(),
-    location,
-    comments: [
-      {
-        id: uuid(),
-        name: "Gretchen Wieners",
-        comment: "That was so fetch",
-        likes: 0,
-        timestamp: Date.now(),
-      },
-      {
-        id: uuid(),
-        name: "Karen Smith",
-        comment: "On Wednesdays we wear pink",
-        likes: 0,
-        timestamp: Date.now(),
-      },
-      {
-        id: uuid(),
-        name: "Damian",
-        comment: "That’s why her hair is so big. It’s full of secrets.",
-        likes: 0,
-        timestamp: Date.now(),
-      },
-    ],
-  };
-  videos.push(newVideoUpload);
-  writeVideoDetailsFile(videos);
-  res.status(201).send("New video");
-});
+  const { title, description, location } = req.body;
 
+  let image = req.files.image;
+
+  image.mv("./public/images/" + image.name, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    } else {
+      const newVideoUpload = {
+        id: uuid(),
+        title,
+        channel: "Mean Girls",
+        image: `http://localhost:3001/images/${image.name}`,
+        description,
+        views: "4",
+        likes: "4",
+        duration: "4:01",
+        video: "https://project-2-api.herokuapp.com/stream",
+        timestamp: Date.now(),
+        location,
+        comments: [
+          {
+            id: uuid(),
+            name: "Gretchen Wieners",
+            comment: "That was so fetch",
+            likes: 0,
+            timestamp: Date.now(),
+          },
+          {
+            id: uuid(),
+            name: "Karen Smith",
+            comment: "On Wednesdays we wear pink",
+            likes: 0,
+            timestamp: Date.now(),
+          },
+          {
+            id: uuid(),
+            name: "Damian",
+            comment: "That’s why her hair is so big. It’s full of secrets.",
+            likes: 0,
+            timestamp: Date.now(),
+          },
+        ],
+      };
+      videos.push(newVideoUpload);
+
+      writeVideoDetailsFile(videos);
+      res.status(201).send("New video");
+    }
+  });
+});
 module.exports = router;
