@@ -1,5 +1,5 @@
-const videodetails = require("./data/video-details.json");
-const videoRoutes = require("./routes/videos");
+const itemdetails = require("./data/item-details.json");
+const itemRoutes = require("./routes/items");
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(fileupload());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/videos", videoRoutes);
+app.use("/items", itemRoutes);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
