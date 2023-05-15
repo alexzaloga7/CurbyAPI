@@ -12,6 +12,8 @@ function writeItemDetailsFile(items) {
   fs.writeFileSync("./data/item-details.json", JSON.stringify(items));
 }
 
+// get request
+
 router.get("/", (req, res) => {
   const items = readItemDetailsFile();
   res.json(items);
@@ -34,6 +36,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// delete request
+
 router.delete("/:id", (req, res) => {
   const items = readItemDetailsFile();
   const index = items.findIndex((item) => item.id === req.params.id);
@@ -49,6 +53,8 @@ router.delete("/:id", (req, res) => {
   }
 });
 
+// post request
+
 router.post("/", (req, res) => {
   const items = readItemDetailsFile();
   const { title, description, location } = req.body;
@@ -62,38 +68,10 @@ router.post("/", (req, res) => {
       const newItemUpload = {
         id: uuid(),
         title,
-        channel: "Mean Girls",
         image: `http://localhost:3001/images/${image.name}`,
         description,
-        views: "4",
-        likes: "4",
-        duration: "4:01",
-        video: "https://project-2-api.herokuapp.com/stream",
         timestamp: Date.now(),
         location,
-        comments: [
-          {
-            id: uuid(),
-            name: "Gretchen Wieners",
-            comment: "That was so fetch",
-            likes: 0,
-            timestamp: Date.now(),
-          },
-          {
-            id: uuid(),
-            name: "Karen Smith",
-            comment: "On Wednesdays we wear pink",
-            likes: 0,
-            timestamp: Date.now(),
-          },
-          {
-            id: uuid(),
-            name: "Damian",
-            comment: "That’s why her hair is so big. It’s full of secrets.",
-            likes: 0,
-            timestamp: Date.now(),
-          },
-        ],
       };
       items.push(newItemUpload);
 
